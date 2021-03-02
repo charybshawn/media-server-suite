@@ -9,8 +9,15 @@ version: '3.3'
 services:
     # PORTAINER
     portainer:
-      image: portainer/portainer
-      command: -H unix:///var/run/
+      image: portainer/portainer-ce
+      ports:
+        - '8000:8000'
+        - '9000:9000'
+      container_name: portainer
+      restart: always
+      volumes:
+        - '/var/run/docker.sock:/var/run/docker.sock'
+        - './portainer_data:/data'
 
     # NZBGET Block
     nzbget:
