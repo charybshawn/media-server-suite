@@ -1,6 +1,7 @@
-# Docker Compose file for Media Server
-# Version 2.0
-# Updated: 2020-12-19
+# Docker Compose file for Media Server Suite
+# Suite includes Sonarr, Radarr, NZBGET, Portainer, etc.
+# Created: 2020-12-19
+# Updated: 2021-03-01
 
 version: '3.3'
 
