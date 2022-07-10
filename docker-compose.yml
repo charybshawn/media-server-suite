@@ -7,17 +7,22 @@ version: '3.3'
 
 
 services:
-    # PORTAINER
-    portainer:
-      image: portainer/portainer-ce
+
+
+    autoscan:
+      container_name: autoscan
       ports:
-        - '8000:8000'
-        - '9000:9000'
-      container_name: portainer
-      restart: always
+          - '3030:3030'
+      environment:
+          - PUID=1000
+          - PGID=129
+          - UMASK=002
+          - TZ=America/Vancouver
+          - PLEX_LOGIN=
+          - PLEX_PASSWORD=
       volumes:
-        - '/var/run/docker.sock:/var/run/docker.sock'
-        - './portainer_data:/data'
+          - '/home/thor/.config/autoscan:/config'
+      image: cr.hotio.dev/hotio/autoscan
 
     # NZBGET Block
     nzbget:
@@ -37,7 +42,6 @@ services:
       volumes:
         - /home/thor/.config/nzbget:/config
         - /downloads:/data/downloads
-        #- /daemon/nzbget/intermediate:/data/downloads/intermediate
 
     # RADARR Block
     radarr:
@@ -46,7 +50,6 @@ services:
       depends_on:
         - "nzbget"
       restart: unless-stopped
-      #network_mode: host
       ports:
         - 7878:7878
       environment:
@@ -60,28 +63,6 @@ services:
         - /home/thor/.config/radarr:/config
         - /downloads:/data/downloads
         - /gmedia:/data/media
-
-    # RADARR 4K Block
-    radarr4k:
-      image: hotio/radarr:nightly
-      container_name: radarr4k
-      depends_on:
-        - "nzbget"
-      restart: unless-stopped
-      #network_mode: host
-      ports:
-        - 7879:7879
-      environment:
-        - PUID=1000
-        - PGID=129
-        - UMASK=002
-        - TZ=America/Vancouver
-        - ARGS=
-        - DEBUG=no
-      volumes:
-        - /home/thor/.config/radarr4k:/config
-        - /downloads:/data/downloads:rw
-        - /gmedia:/data/media:rw
 
     # SONARR Block
     sonarr:
